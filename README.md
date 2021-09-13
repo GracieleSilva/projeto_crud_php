@@ -1,1 +1,4 @@
-# Crud com Server em PHP com PDO front em html com angular 1.5
+# Crud 
+
+Server em PHP com PDO 
+Front em html com angular 1.5 e bootstrap
