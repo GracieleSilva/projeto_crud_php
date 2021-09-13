@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular.min.js'></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+	<style type="text/css">
+.navbar-default {
+    background-color: #5bc0de;
+    border-color: #5bc0de;
+    border-radius: 0;
+}
+
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #FFF;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #FFF;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+    background-color: #428bca;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+    color: #FFF;
+    background-color: #428bca;
+}
+
+.navbar-default .navbar-text {
+    color: #FFF;
+}
+
+.navbar-default .navbar-toggle {
+    border-color: #428bca;
+}
+
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+    background-color: #428bca;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: #FFF;
+}
+
+	</style>
+
+</head>
+	<body ng-app="formApp" ng-controller="CrudCtrl">
+
+		
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- logo -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mynavbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Projeto</a>
+        </div>
+        <!-- menu -->
+        <div class="collapse navbar-collapse navbar-right" id="mynavbar">
+            <ul class="nav navbar-nav">
+                <li><a href="http://getbootstrap.com/">Bootstrap</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+			<hr>
+				<button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#myModal" ng-click="limpa()">Add New</button>
+
+				<h2>{{tituloPagina}}</h2>
+				<samp class="clearfix"></samp>
+			<hr>
+
+			<div class="alert alert-dismissable" ng-if="message" ng-class="{ 'alert-info': success, 'alert-danger': !success}">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="limpa()" >×</button>
+				<h4>{{ message }}</h4>
+			</div>
+
+
+			<!-- ModalCadastra -->
+			<div id="myModal" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Adicionar Usuario</h4>
+						</div>
+						<div class="modal-body">
+							<form role="form">
+								<div id="name-group" class="form-group">
+									<label>Name</label>
+									<input type="text" name="name" class="form-control" placeholder="Digite Seu Nome" ng-model="formData.cliente_nome">
+									<span class="help-block"></span>
+								</div>
+								<div id="name-group" class="form-group">
+									<label>Email</label>
+									<input type="text" name="email" class="form-control" placeholder="Caped@Crusader" ng-model="formData.cliente_email">
+									<span class="help-block"></span>
+								</div>
+								<button type="submit" class="btn btn-success btn-lg btn-block"  ng-click="cadastra()" data-dismiss="modal"><span class="glyphicon glyphicon-flash"></span>Submit!</button>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal Editar -->
+			<div id="Editar" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Alterar Usuario</h4>
+						</div>
+						<div class="modal-body">
+							<form role="form">
+								<div id="name-group" class="form-group">
+									<label>Name</label>
+									<input type="text" name="name" class="form-control" ng-model="clickedUser.cliente_nome">
+									<span class="help-block"></span>
+								</div>
+								<div id="name-group" class="form-group">
+									<label>Email</label>
+									<input type="text" name="email" class="form-control" ng-model="clickedUser.cliente_email">
+									<span class="help-block"></span>
+								</div>
+								<button type="submit" class="btn btn-success btn-lg btn-block"  ng-click="atualizar()" data-dismiss="modal"><span class="glyphicon glyphicon-flash"></span>Submit!</button>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- ModalDelet -->
+			<div id="ModalDelet" class="modal fade" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">Deseja Apagar Realmente ?</h4>
+						</div>
+						<div class="modal-body">
+							<strong>Deletar Usuario {{ clickedUser.cliente_nome }} </strong>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" ng-click="deleteUser()" data-dismiss="modal">Yes</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Tabela -->
+			<table class="table table-bordered table-hover">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Nome</th>
+						<th>Email</th>
+						<th class="col-xs-1">Editar</th>
+						<th class="col-xs-1">Remover</th>
+					</tr>
+				</thead>
+				<tbody> 
+					<tr ng-repeat="(key, value) in usuarios">
+						<td>{{value.cliente_id}}</td>
+						<td>{{value.cliente_nome}}</td>
+						<td>{{value.cliente_email}}</td>
+						<td>
+							<a type="button" ng-click="seletor(value)" data-toggle="modal" data-target="#Editar" aria-label="Left Align">Editar <span  class="glyphicon glyphicon-pencil"></span ></a>
+						</td>
+						<td>
+							<a type="button" ng-click="seletor(value)" data-toggle="modal" data-target="#ModalDelet" aria-label="Left Align"> Deletar <span  class="glyphicon glyphicon-trash"></span></a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+<script type="text/javascript">
+
+var formApp = angular.module('formApp', []);
+
+formApp.controller('CrudCtrl', function($scope, $http){
+
+	$scope.tituloPagina = "CRUD 2";
+	$scope.message = '';
+	$scope.usuarios = {}
+	$scope.variable = 'alert-info';
+	$scope.success = false;
+
+	$scope.seletor = function(tupla){
+		$scope.clickedUser = tupla;
+		$scope.limpa();
+	};
+	$scope.limpa = function(){
+		$scope.message='';
+	};
+	$scope.atualiza = function(){
+		$http.get("http://localhost/Servidor/server.php").then(function (response) {
+			$scope.usuarios =  response.data.user;
+		});
+	};
+	$scope.atualiza();
+	$scope.atualizar = function(){
+		$http({
+			method  : 'POST',
+			url     : 'http://localhost/Servidor/server.php',
+			data    : $.param({'atualizar': $scope.clickedUser}),
+			headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).success(function(data) {
+			if (!data.success) {
+				$scope.message = data.errors.name;
+				$scope.message = $scope.message +" "+data.errors.email;
+				$scope.success = data.success;
+			} else {
+				$scope.message = data.message;
+				$scope.success = data.success;
+			}
+		});
+		$scope.clickedUser  = null;
+		return $scope.atualiza();
+	};
+
+	$scope.cadastra = function(){
+		$http({
+			method  : 'POST',
+			url     : 'http://localhost/Servidor/server.php',
+			data    : $.param({'cadastra': $scope.formData}),
+			headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).success(function(data) {
+			if (!data.success) {
+				$scope.message = data.errors.name;
+				$scope.message = $scope.message +" "+data.errors.email;
+				$scope.success = data.success;
+			} else {
+				$scope.message = data.message;
+				$scope.success = data.success;
+			}
+		});
+		$scope.formData = null;
+		return $scope.atualiza();
+	};
+
+	$scope.deleteUser = function(){
+		$http({
+			method  : 'POST',
+			url     : 'http://localhost/Servidor/server.php',
+			data    : $.param({'deletar': $scope.clickedUser}),
+			headers : { 'Content-Type': 'application/x-www-form-urlencoded' }
+		}).success(function(data) {
+			
+			if (!data.success) {
+				$scope.message = data.errors.name;
+				$scope.message = $scope.message +" "+data.errors.email;
+				$scope.success = data.success;
+			} else {
+				$scope.message = data.message;
+				$scope.success = data.success;
+			}
+		});
+		$scope.clickedUser = null;
+		return $scope.atualiza();
+	};
+});
+
+</script>
+</body>
+</html>
